@@ -1,0 +1,52 @@
+from flask import Flask, render_template, request, redirect, url_for
+import serial
+import time
+import threading
+
+# Setup serial with Arduino
+arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+time.sleep(2)
+
+app = Flask(_name_)
+fan_state = "OFF"
+mode = "AUTO"
+current_temp = "--"
+
+#Read temperature from Arduino
+def read_temperature():
+    global current_temp
+    while True:
+        if arduino.in_waiting:
+            try:
+                temp_data = arduino.readline().decode().strip()
+                temp = float(temp_data)
+                current_temp = f"{temp:.1f} °C"
+            except ValueError:
+                pass
+        time.sleep(2)
+# Start temperature reading thread
+threading.Thread(target=read_temperature, daemon=True).start()
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    global fan_state, mode
+    if request.method == "POST":
+        action = request.form.get("action")
+
+        if action == "ON":
+            fan_state = "ON"
+            mode = "MANUAL"
+            arduino.write(b'ON\n')
+        elif action == "OFF":
+            fan_state = "OFF"
+            mode = "MANUAL"
+            arduino.write(b'OFF\n')
+        elif action == "AUTO":
+            mode = "AUTO"
+            fan_state = "AUTO"
+            arduino.write(b'AUTO\n')
+
+    return render_template("index2.html", temp=current_temp, fan=fan_state, mode=mode)
+
+if _name_ == "_main_":
+    app.run(host="0.0.0.0", port=5000, debug=True)
