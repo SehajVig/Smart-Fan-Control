@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fan Control Dashboard</title>
+<style>
+  /* Reset */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    background: #faf6f0; /* light warm cream */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    color: #444;
+  }
+  .container {
+    background: #ffffff;
+    margin: 60px 20px;
+    padding: 45px 40px;
+    border-radius: 20px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+  h1 {
+    font-weight: 700;
+    font-size: 2.25rem;
+    margin-bottom: 35px;
+    color: #2c3e50;
+    letter-spacing: 1.4px;
+    font-family: 'Segoe UI Black', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  p {
+    font-size: 1.15rem;
+    margin: 18px 0;
+    color: #555;
+  }
+  strong {
+    color: #8a6d3b; /* warm gold accent */
+    font-weight: 600;
+  }
+  /* Status colors */
+  .status-on {
+    color: #27ae60; /* green */
+    font-weight: 600;
+  }
+  .status-off {
+    color: #c0392b; /* red */
+    font-weight: 600;
+  }
+  .status-auto {
+    color: #d35400; /* deep orange */
+    font-weight: 600;
+  }
+  form {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  button {
+    background: linear-gradient(145deg, #f2c94c, #d4af37);
+    border: none;
+    color: #3e2e00;
+    padding: 15px 30px;
+    font-size: 1.15rem;
+    border-radius: 35px;
+    cursor: pointer;
+    flex: 1 1 120px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    box-shadow: 0 6px 12px rgba(212, 175, 55, 0.4);
+    transition: all 0.3s ease;
+    user-select: none;
+    text-transform: uppercase;
+  }
+  button:hover {
+    background: linear-gradient(145deg, #d4af37, #f2c94c);
+    box-shadow: 0 9px 22px rgba(212, 175, 55, 0.6);
+    transform: scale(1.05);
+  }
+  button:active {
+    transform: scale(0.97);
+  }
+  @media (max-width: 480px) {
+    .container {
+      padding: 35px 25px;
+      margin: 30px 15px;
+    }
+    button {
+      font-size: 1rem;
+      padding: 14px 20px;
+      flex: 1 1 100%;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Fan Control Dashboard</h1>
+    <p><strong>Temperature:</strong> {{ temp }}</p>
+    <p><strong>Fan Status:</strong>
+      {% if fan == 'ON' %}
+        <span class="status-on">{{ fan }}</span>
+      {% elif fan == 'OFF' %}
+        <span class="status-off">{{ fan }}</span>
+      {% else %}
+        <span class="status-auto">{{ fan }}</span>
+      {% endif %}
+    </p>
+    <p><strong>Mode:</strong> {{ mode }}</p>
+
+    <form method="post">
+      <button name="action" value="ON" type="submit">Turn ON</button>
+      <button name="action" value="OFF" type="submit">Turn OFF</button>
+      <button name="action" value="AUTO" type="submit">Automatic Mode</button>
+    </form>
+  </div>
+</body>
+</html>
